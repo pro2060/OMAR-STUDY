@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090909">
+<title>ROYAL STUDY</title>
+<style>
+:root{--bg:#090909;--panel:#151515;--panel2:#1d1d1d;--gold:#d6ad50;--gold2:#f0d58a;--muted:#aaa;--line:#34302a;--green:#4caf78}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#29200d 0,#090909 38%);color:#f6f1e5;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;line-height:1.6}
+.wrap{max-width:850px;margin:auto;padding:18px 14px 42px}.hero{text-align:center;padding:22px 12px 18px}.crown{font-size:34px}.brand{font-weight:900;letter-spacing:2px;color:var(--gold2);font-size:clamp(28px,7vw,42px);margin:0}.sub{color:var(--muted);margin:4px 0 0;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:12px 0 18px}.stat,.card{background:linear-gradient(145deg,#1b1b1b,#111);border:1px solid var(--line);border-radius:16px;padding:14px}.stat{text-align:center}.num{display:block;color:var(--gold2);font-size:24px;font-weight:800}.small{font-size:12px;color:var(--muted)}
+h2{font-size:18px;color:var(--gold2);margin:0 0 12px}.section{margin:14px 0}.days{display:flex;gap:7px;overflow:auto;padding:2px 1px 10px}.daybtn,.tab{border:1px solid var(--line);background:#171717;color:#eee;border-radius:999px;padding:9px 14px;white-space:nowrap;font:inherit}.daybtn.active,.tab.active{background:var(--gold);color:#17120a;border-color:var(--gold);font-weight:800}
+.task{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid #292929}.task:last-child{border:0}.task input{width:19px;height:19px;accent-color:var(--gold);margin-top:4px;flex:none}.task.done .taskname{text-decoration:line-through;color:#888}.taskname{font-weight:650}.meta{font-size:12px;color:var(--muted)}.tag{font-size:11px;color:var(--gold2);border:1px solid #514326;border-radius:20px;padding:2px 8px;margin-right:auto;white-space:nowrap}
+button,input,select{font:inherit}.btn{background:var(--gold);color:#17120a;border:0;border-radius:11px;padding:10px 14px;font-weight:800}.btn.secondary{background:#292929;color:#eee;border:1px solid #444}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.field{width:100%;background:#0e0e0e;color:#fff;border:1px solid #45403a;border-radius:10px;padding:10px;min-width:0}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.progress{height:9px;background:#333;border-radius:99px;overflow:hidden;margin:8px 0}.bar{height:100%;width:0;background:linear-gradient(90deg,#a77c28,#f0d58a);transition:width .2s}.timer{text-align:center;padding:10px}.clock{font-size:42px;font-weight:900;color:var(--gold2);font-variant-numeric:tabular-nums}.grade{display:grid;grid-template-columns:1fr 100px;gap:8px;align-items:center;margin:8px 0}.notice{font-size:12px;color:var(--muted);margin-top:10px}.footer{text-align:center;color:#777;font-size:11px;padding:20px 0}
+@media(max-width:430px){.stats{gap:6px}.stat{padding:10px 5px}.num{font-size:20px}.formgrid{grid-template-columns:1fr}.grade{grid-template-columns:1fr 90px}}
+</style>
+</head>
+<body><main class="wrap">
+<header class="hero"><div class="crown">♛</div><h1 class="brand">ROYAL STUDY</h1><p class="sub">خطتك اليومية لطريق التفوق • تالتة إعدادي</p></header>
+<div class="stats">
+ <div class="stat"><span class="num" id="doneCount">0</span><span class="small">مهمة منجزة اليوم</span></div>
+ <div class="stat"><span class="num" id="percent">0%</span><span class="small">إنجاز اليوم</span></div>
+ <div class="stat"><span class="num" id="streak">0</span><span class="small">نقطة هذا الأسبوع</span></div>
+</div>
+<section class="card section"><h2>📅 جدول الأسبوع</h2><div class="days" id="days"></div><div class="progress"><div class="bar" id="bar"></div></div><div id="tasks"></div><div class="row" style="margin-top:12px"><button class="btn secondary" id="resetDay">إعادة ضبط مهام اليوم</button><button class="btn" id="addTask">+ إضافة مهمة</button></div></section>
+<section class="card section"><h2>⏱️ مؤقت المذاكرة</h2><div class="timer"><div class="clock" id="clock">25:00</div><div class="small" id="timerLabel">جلسة تركيز</div><div class="row" style="max-width:360px;margin:12px auto"><button class="btn" id="start">ابدأ</button><button class="btn secondary" id="pause">إيقاف مؤقت</button><button class="btn secondary" id="restart">إعادة</button></div><div class="row" style="max-width:360px;margin:auto"><button class="btn secondary" data-min="25">25 دقيقة</button><button class="btn secondary" data-min="45">45 دقيقة</button><button class="btn secondary" data-min="休">راحة 5 د</button></div></div></section>
+<section class="card section"><h2>📝 درجات الاختبارات</h2><div id="grades"></div><div class="row"><strong>المجموع:</strong><strong id="total" style="color:var(--gold2)">0 / 500</strong></div><p class="notice">اكتب درجتك من 100 لكل مادة، وسيتم حفظها على هذا الجهاز.</p></section>
+<section class="card section"><h2>✍️ واجباتي وملاحظاتي</h2><textarea id="notes" class="field" rows="4" placeholder="اكتب الواجبات الإضافية أو ملاحظاتك هنا..."></textarea><p class="notice">يتم حفظ التقدم تلقائيًا على نفس المتصفح والجهاز. مسح بيانات المتصفح قد يؤدي لفقدانه.</p></section>
+<div class="footer">ROYAL STUDY • خطّط، ذاكر، راجع، وتقدّم 👑</div>
+</main>
+<script>
+const days=["السبت","الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة"];
+const schedule=[
+[["8:30–9:30","مراجعة رياضيات","مذاكرة"],["9:30–10:15","تدريبات رياضيات","مذاكرة"],["11:00–13:00","درس رياضيات","درس"],["14:00–16:00","درس علوم","درس"],["16:30–17:15","واجب العلوم","واجب"],["17:15–18:00","واجب الرياضيات","واجب"],["20:30–22:30","درس عربي","درس"],["بعد الدرس","تسجيل واجب العربي","مراجعة"]],
+[["8:00–9:00","رياضيات","مذاكرة"],["10:00 أو 12:00","درس دراسات (حسب الموعد)","درس"],["بعد الدرس","واجب الدراسات","واجب"],["14:00–14:45","علوم","مذاكرة"],["15:00–15:45","واجب العلوم","واجب"],["16:00–16:45","عربي","مذاكرة"],["17:00–17:45","إنجليزي","مذاكرة"],["18:00–18:30","واجب رياضيات ومراجعة","واجب"]],
+[["8:30–9:15","مراجعة رياضيات","مذاكرة"],["9:15–10:00","واجب رياضيات","واجب"],["11:00–13:00","درس رياضيات","درس"],["16:00–18:00","درس إنجليزي","درس"],["19:00–21:00","درس عربي","درس"],["بعد الدرس","واجب الإنجليزي وتسجيل واجب العربي","واجب"]],
+[["8:00–9:00","عربي","مذاكرة"],["10:00 أو 12:00","درس دراسات (حسب الموعد)","درس"],["بعد الدرس","واجب الدراسات","واجب"],["14:00–16:00","درس علوم","درس"],["16:30–17:15","واجب العلوم","واجب"],["17:30–18:15","إنجليزي","مذاكرة"],["19:00–19:45","رياضيات","مذاكرة"]],
+[["8:00–9:00","رياضيات","مذاكرة"],["9:00–9:45","حل مسائل","مذاكرة"],["10:00 أو 12:00","درس دراسات (حسب الموعد)","درس"],["بعد الدرس","واجب الدراسات","واجب"],["14:00–15:00","علوم","مذاكرة"],["15:30–16:15","عربي","مذاكرة"],["17:00–17:45","إنجليزي","مذاكرة"],["18:00–18:30","استكمال واجبات","واجب"]],
+[["8:30–9:15","علوم","مذاكرة"],["9:15–10:00","واجب العلوم","واجب"],["11:00–13:00","درس رياضيات","درس"],["16:00–18:00","درس إنجليزي","درس"],["19:00–21:00","درس عربي","درس"],["بعد الدرس","واجب الإنجليزي وتسجيل واجب العربي","واجب"]],
+[["9:00–10:00","اختبار رياضيات","اختبار"],["10:30–11:15","اختبار علوم","اختبار"],["12:00–12:45","اختبار عربي","اختبار"],["15:00–15:45","اختبار دراسات","اختبار"],["16:30–17:15","اختبار إنجليزي","اختبار"],["18:00–19:00","تصحيح الأخطاء واستكمال الواجبات","مراجعة"]]
+];
+let selected=new Date().getDay(); selected=(selected+1)%7; // JS Sunday=0 => array Sunday index 1
+let state=JSON.parse(localStorage.getItem("royalStudy")||"{}");
+function save(){localStorage.setItem("royalStudy",JSON.stringify(state))}
+function key(){return new Date().toISOString().slice(0,10)+"_"+selected}
+function getChecks(){return state[key()]||{}}
+function renderDays(){document.getElementById("days").innerHTML=days.map((d,i)=>`<button class="daybtn ${i===selected?"active":""}" data-day="${i}">${d}</button>`).join("");document.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{selected=+b.dataset.day;render()})}
+function renderTasks(){let list=schedule[selected].map((t,i)=>({t,i}));(state.extra?.[selected]||[]).forEach((name,j)=>list.push({t:["إضافية",name,"إضافية"],i:"x"+j}));let checks=getChecks();document.getElementById("tasks").innerHTML=list.map(({t,i})=>`<label class="task ${checks[i]?"done":""}"><input type="checkbox" data-task="${i}" ${checks[i]?"checked":""}><span style="flex:1"><span class="taskname">${t[1]}</span><br><span class="meta">${t[0]}</span></span><span class="tag">${t[2]}</span></label>`).join("");document.querySelectorAll("[data-task]").forEach(c=>c.onchange=()=>{let x=getChecks();x[c.dataset.task]=c.checked;state[key()]=x;save();renderStats();renderTasks()})}
+function renderStats(){let vals=Object.values(getChecks()),total=schedule[selected].length,done=vals.filter(Boolean).length;document.getElementById("doneCount").textContent=done;document.getElementById("percent").textContent=Math.round(done/total*100)+"%";document.getElementById("bar").style.width=(done/total*100)+"%";let points=Object.keys(state).filter(k=>k.match(/^\d{4}-\d\d-\d\d_/)).reduce((n,k)=>n+Object.values(state[k]).filter(Boolean).length,0);document.getElementById("streak").textContent=points}
+function renderGrades(){let names=["الرياضيات","العلوم","اللغة العربية","الدراسات","الإنجليزي"];document.getElementById("grades").innerHTML=names.map((n,i)=>`<label class="grade"><span>${n}</span><input class="field score" data-score="${i}" type="number" min="0" max="100" placeholder="0–100" value="${(state.grades||[])[i]??""}"></label>`).join("");document.querySelectorAll(".score").forEach(x=>x.oninput=()=>{state.grades=state.grades||["","","","",""];state.grades[x.dataset.score]=x.value;save();updateTotal()});updateTotal()}
+function updateTotal(){let a=state.grades||[],sum=a.reduce((n,v)=>n+(Number(v)||0),0);document.getElementById("total").textContent=sum+" / 500"}
+function render(){renderDays();renderTasks();renderStats()}
+render();renderGrades();document.getElementById("notes").value=state.notes||"";document.getElementById("notes").oninput=e=>{state.notes=e.target.value;save()};
+document.getElementById("resetDay").onclick=()=>{if(confirm("إعادة ضبط مهام اليوم المحدد؟")){delete state[key()];save();render()}};
+document.getElementById("addTask").onclick=()=>{let n=prompt("اكتب اسم المهمة الجديدة:");if(n&&n.trim()){let extra=state.extra||{};extra[selected]=extra[selected]||[];extra[selected].push(n.trim());state.extra=extra;save();render()}};
+let remain=1500,interval=null;function show(){document.getElementById("clock").textContent=String(Math.floor(remain/60)).padStart(2,"0")+":"+String(remain%60).padStart(2,"0")}
+function stop(){clearInterval(interval);interval=null}document.getElementById("start").onclick=()=>{if(interval)return;interval=setInterval(()=>{remain--;show();if(remain<=0){stop();document.getElementById("timerLabel").textContent="انتهت الجلسة! خذ راحة قصيرة."}},1000)};
+document.getElementById("pause").onclick=stop;document.getElementById("restart").onclick=()=>{stop();remain=1500;show();document.getElementById("timerLabel").textContent="جلسة تركيز"};
+document.querySelectorAll("[data-min]").forEach(b=>b.onclick=()=>{stop();remain=b.dataset.min==="休"?300:Number(b.dataset.min)*60;document.getElementById("timerLabel").textContent=b.dataset.min==="休"?"وقت الراحة":"جلسة تركيز";show()});
+</script></body></html>
